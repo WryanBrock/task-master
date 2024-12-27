@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.self.taskmaster.TaskWindowController">
+   <children>
+      <VBox prefHeight="401.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Task Name">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="name_field" prefHeight="26.0" prefWidth="212.0" promptText="enter name">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="25.0" right="30.0" top="30.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="done" mnemonicParsing="false" onAction="#done_action" text="Done">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel_action" text="Cancel">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="70.0" text="Start Time">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="start_field" promptText="enter time">
+                     <HBox.margin>
+                        <Insets bottom="30.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <VBox prefHeight="100.0" prefWidth="65.0">
+                     <children>
+                        <CheckBox fx:id="start_am_check" mnemonicParsing="false" selected="true" text="AM">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                        <CheckBox fx:id="start_pm_check" mnemonicParsing="false" text="PM">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                     </children>
+                  </VBox>
+                  <Label prefHeight="17.0" prefWidth="70.0" text="End Time">
+                     <HBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="end_field" promptText="enter time">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <VBox prefHeight="100.0" prefWidth="63.0">
+                     <children>
+                        <CheckBox fx:id="end_am_check" mnemonicParsing="false" selected="true" text="AM">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                        <CheckBox fx:id="end_pm_check" mnemonicParsing="false" text="PM">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="65.0" />
+                  <VBox prefHeight="65.0" prefWidth="152.0">
+                     <children>
+                        <DatePicker fx:id="start_date" prefHeight="26.0" prefWidth="218.0" promptText="enter date" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="65.0" prefWidth="150.0" />
+                  <VBox prefHeight="65.0" prefWidth="199.0">
+                     <children>
+                        <DatePicker fx:id="end_date" prefHeight="26.0" prefWidth="164.0" promptText="enter date">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </DatePicker>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="WorkLoad">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <CheckBox fx:id="low_check" mnemonicParsing="false" text="Low">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="40.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="med_check" mnemonicParsing="false" text="Medium">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="40.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="heavy_check" mnemonicParsing="false" text="Heavy">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="40.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="92.0" prefWidth="607.0">
+               <children>
+                  <Label text="Task Defintion">
+                     <HBox.margin>
+                        <Insets bottom="30.0" left="30.0" right="10.0" top="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextArea fx:id="definition_field" prefHeight="100.0" prefWidth="417.0" promptText="enter description">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" />
+                     </HBox.margin>
+                  </TextArea>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
