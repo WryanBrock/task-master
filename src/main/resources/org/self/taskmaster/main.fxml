@@ -73,10 +73,10 @@
       </VBox>
       <StackedBarChart fx:id="stackedChart" prefHeight="358.0" prefWidth="469.0" title="Progression Chart" GridPane.columnIndex="1">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <CategoryAxis fx:id="xAxis" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis fx:id="yAxis" />
         </yAxis>
       </StackedBarChart>
     </GridPane>

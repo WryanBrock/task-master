@@ -9,8 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
@@ -18,11 +17,13 @@ import javafx.stage.Stage;
 import org.self.taskmaster.dao.DBConnect;
 import org.self.taskmaster.dao.impl.TaskImpl;
 import org.self.taskmaster.models.Task;
+import org.self.taskmaster.models.WorkLoad;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.HashMap;
 
 public class MainController {
 
@@ -55,19 +56,23 @@ public class MainController {
 
 
     @FXML
-    private StackedBarChart<?, ?> stackedChart;
+    private StackedBarChart<String, Number> stackedChart;
 
+    @FXML
+    private CategoryAxis xAxis;
 
+    @FXML
+    private NumberAxis yAxis;
 
     @FXML
     public PieChart progressPie;
     // PieChart data slices
     @FXML
-    private PieChart.Data appleSlice;
+    private PieChart.Data liteSlice;
     @FXML
-    private PieChart.Data bananaSlice;
+    private PieChart.Data modSlice;
     @FXML
-    private PieChart.Data cherrySlice;
+    private PieChart.Data hardSlice;
     @FXML
     public Canvas canvas;
 
@@ -81,6 +86,7 @@ public class MainController {
             stage.setScene(new Scene(root));
             stage.show();
             stage.setOnHidden(event -> {
+                progressPie.getData().clear();
                 refresh();
             });
         } catch (NullPointerException | IOException e) {
@@ -97,6 +103,8 @@ public class MainController {
             e.printStackTrace();
         }
         taskTable.getItems().remove(task);
+        progressPie.getData().clear();
+        refresh();
 
     }
     @FXML
@@ -120,28 +128,79 @@ public class MainController {
         }
     }
 
-
     @FXML
     public void initialize() {
-
        loadTasks();
-
     }
     private void loadTasks() {
 
-        appleSlice = new PieChart.Data("Apples", 30);
-        bananaSlice = new PieChart.Data("Bananas", 25);
-        cherrySlice = new PieChart.Data("Cherries", 45);
-
-        if (progressPie != null) {
-            progressPie.getData().addAll(appleSlice, bananaSlice, cherrySlice);
-        }
         try (Connection connection = DBConnect.getConnection()) {
             tableTasks = new TaskImpl(connection).findAll();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        ObservableList<String> works = FXCollections.observableArrayList();
+
+        for(Task task : tableTasks){
+            works.add(task.getWorkload());
+        }
+        HashMap<String, Integer> map = new HashMap<>();
+
+        for(String item : works){
+            if(item.equals("LITE")){
+                if(map.get("LITE")==null){
+                    map.put("LITE", 0);
+                }
+                map.put("LITE", map.get("LITE")+1);
+
+            }else if (item.equals("MOD")){
+                if(map.get("MOD")==null){
+                    map.put("MOD", 0);
+                }
+                map.put("MOD", map.get("MOD")+1);
+
+            }else if (item.equals("HARD")){
+                if(map.get("HARD")==null){
+                    map.put("HARD", 0);
+                }
+                map.put("HARD", map.get("HARD")+1);
+
+            }
+        }
+        map.putIfAbsent("LITE", 0);
+        map.putIfAbsent("MOD", 0);
+        map.putIfAbsent("HARD", 0);
+
+
+        liteSlice = new PieChart.Data("LITE", map.get("LITE"));
+        modSlice = new PieChart.Data("MOD", map.get("MOD"));
+        hardSlice = new PieChart.Data("HARD", map.get("HARD"));
+
+        if (progressPie != null) {
+            progressPie.getData().addAll(liteSlice, modSlice, hardSlice);
+        }
+
+        xAxis.setLabel("Categories");
+        yAxis.setLabel("Values");
+
+        // Create data series
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("2019");
+        series1.getData().add(new XYChart.Data<>("A", 10));
+        series1.getData().add(new XYChart.Data<>("B", 20));
+        series1.getData().add(new XYChart.Data<>("C", 15));
+
+        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+        series2.setName("2020");
+        series2.getData().add(new XYChart.Data<>("A", 25));
+        series2.getData().add(new XYChart.Data<>("B", 30));
+        series2.getData().add(new XYChart.Data<>("C", 20));
+
+        // Add data to chart
+        stackedChart.getData().addAll(series1, series2);
+
         id_col.setCellValueFactory(new PropertyValueFactory<>("id"));
         name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
         work_col.setCellValueFactory(new PropertyValueFactory<>("workload"));
