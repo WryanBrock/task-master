@@ -14,6 +14,8 @@ public class Task {
     private WorkLoad workload;
     private String description;
 
+
+
     public Task() {
     }
 
@@ -49,7 +51,9 @@ public class Task {
     }
 
     public void setStart_time(Time start_time) {
-        this.start_time = start_time;
+
+        if(start_time!=null){
+        this.start_time = start_time;}
     }
 
     public Time getEnd_time() {
@@ -84,6 +88,7 @@ public class Task {
     public void setWorkload(WorkLoad workload) {
         this.workload = workload;
     }
+
     public void setWorkload(String workload) {
         WorkLoad workL = WorkLoad.valueOf(workload);
         this.workload = workL;
@@ -96,5 +101,17 @@ public class Task {
         this.description = description;
     }
 
-
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", start_time=" + start_time +
+                ", end_time=" + end_time +
+                ", start_date=" + start_date +
+                ", end_date=" + end_date +
+                ", workload=" + workload +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

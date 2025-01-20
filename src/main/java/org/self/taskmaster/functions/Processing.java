@@ -7,6 +7,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 //import java.time.LocalDate;
 //import java.time.LocalDateTime;
 //import java.time.LocalTime;
@@ -34,6 +36,20 @@ public class Processing {
 //    }
 
     public static Time TimeProcessing(String text) {
+
+        ArrayList<String> list = new ArrayList<>();
+
+
+        String[] strings = text.split(":");
+        if(strings.length !=3){
+            text = text + ":00";
+        }
+//        list.addAll(Arrays.asList(text.split(":")));
+//
+//        if(list.size() != 3){
+//            list.add("00");
+//        }
+//        [4, 30, 20]
         try {
             return Time.valueOf(text); // Expecting a format like "14:30:00"
         } catch (IllegalArgumentException e) {
@@ -41,7 +57,7 @@ public class Processing {
             return null; // Handle invalid input gracefully
         }
     }
-    public static String[] ReverTimeProcessing(Task task) {
+    public static String[] ReverseTimeProcessing(Task task) {
         String[] arrString = {};
         arrString[0]= task.getStart_time().toString();
         arrString[1]= task.getStart_date().toString();

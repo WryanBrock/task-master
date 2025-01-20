@@ -1,5 +1,6 @@
 package org.self.taskmaster;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,7 +9,6 @@ import org.self.taskmaster.dao.DBConnect;
 import org.self.taskmaster.dao.impl.TaskImpl;
 import org.self.taskmaster.models.Task;
 import org.self.taskmaster.models.WorkLoad;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +63,12 @@ public class TaskWindowController {
     @FXML
     private Button cancel;
 
-    private Task task;
+    private MainController controller;
+
+    @FXML
+    private TextField task_id;
+
+    private Boolean modified;
 
     @FXML
     void cancel_action(ActionEvent event) {
@@ -88,10 +93,21 @@ public class TaskWindowController {
         task.setEnd_time(TimeProcessing(end_field.getText()));
         task.setEnd_date(DateProcessing(end_date.getValue()));
         task.setDescription(definition_field.getText().trim());
-        try {
-            Task taskReturn = new TaskImpl(DBConnect.getConnection()).create(task);
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+
+        if (modified){
+            task.setId(Long.parseLong(task_id.getText()));
+            try {
+                Task taskReturn = new TaskImpl(DBConnect.getConnection()).update(task);
+            } catch (SQLException throwable) {
+                System.out.println(throwable);;
+            }
+        }else{
+            try {
+                Task taskReturn = new TaskImpl(DBConnect.getConnection()).create(task);
+                System.out.println("create");
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
+            }
         }
         Stage stage = (Stage) done.getScene().getWindow();
         stage.close();
@@ -99,63 +115,49 @@ public class TaskWindowController {
 
     @FXML
     void initialize() {
-        // Initialize CheckBoxes (checked by default)
+        modified = false;
         low_check.setSelected(false);
         med_check.setSelected(false);
         heavy_check.setSelected(false);
-
         start_am_check.setSelected(true);
         start_pm_check.setSelected(false);
         end_am_check.setSelected(true);
         end_pm_check.setSelected(false);
-
-        // Add listeners to each checkbox
         start_am_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherStart(start_am_check);
             }
         });
-        // Add listeners to each checkbox
         start_pm_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherStart(start_pm_check);
             }
         });
-
-
-        // Add listeners to each checkbox
         end_am_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherEnd(end_am_check);
             }
         });
-        // Add listeners to each checkbox
         end_pm_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherEnd(end_pm_check);
             }
         });
-
-
-        // Add listeners to each checkbox
         low_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherEnums(low_check);
             }
         });
-
         med_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherEnums(med_check);
             }
         });
-
         heavy_check.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 uncheckOtherEnums(heavy_check);
             }
         });
-
     }
 
     private void uncheckOtherEnums(CheckBox selectedCheckBox) {
@@ -169,8 +171,6 @@ public class TaskWindowController {
             heavy_check.setSelected(false);
         }
     }
-
-
     private void uncheckOtherStart(CheckBox selectedCheckBox) {
         if (selectedCheckBox != start_am_check) {
             start_am_check.setSelected(false);
@@ -178,10 +178,7 @@ public class TaskWindowController {
         if (selectedCheckBox != start_pm_check) {
             start_pm_check.setSelected(false);
         }
-
     }
-
-
     private void uncheckOtherEnd(CheckBox selectedCheckBox) {
         if (selectedCheckBox != end_am_check) {
             end_am_check.setSelected(false);
@@ -189,50 +186,37 @@ public class TaskWindowController {
         if (selectedCheckBox != end_pm_check) {
             end_pm_check.setSelected(false);
         }
-
     }
-//    public void setWindowTask(Task task) {
-//        this.task = task;
-//        updateUI();
-//    }
-//
-//    // Update the UI with task details
-//    private void updateUI() {
-//        if (task != null) {
-//            name_field.setText(task.getName());
-//
-//            if (low_check.isSelected() && !med_check.isSelected() && !heavy_check.isSelected()) {
-//                task.setWorkload(WorkLoad.LITE);
-//            } else if (!low_check.isSelected() && med_check.isSelected() && !heavy_check.isSelected()) {
-//                task.setWorkload(WorkLoad.MOD);
-//            } else if (!low_check.isSelected() && !med_check.isSelected() && heavy_check.isSelected()) {
-//                task.setWorkload(WorkLoad.HARD);
-//            }
-//
-//            String start_time = "", start_da = "", end_time = "", end_da = "";
-//
-//            String[] newStartDate = start_date.getValue().toString().split("-");
-//            String[] newEndDate = end_date.getValue().toString().split("-");
-//
-//            int x, y, z , a, b, c= 0;
-//
-//            x = Integer.parseInt(newStartDate[0]);
-//            y = Integer.parseInt(newStartDate[1]);
-//            z = Integer.parseInt(newStartDate[2]);
-//
-//            start_field.setText(start_time);
-//            start_date.setValue(LocalDate.of(x,y,z));
-//
-//            a = Integer.parseInt(newEndDate[0]);
-//            b = Integer.parseInt(newEndDate[1]);
-//            c = Integer.parseInt(newEndDate[2]);
-//
-//            end_field.setText(end_time);
-//            end_date.setValue(LocalDate.of(a,b,c));
-//
-//
-//            definition_field.setText(task.getDescription());
-//        }
-//    }
+    public void setWindowTask(Task task) {
+        modified = true;
+        updateUI(task);
+    }
+    private void updateUI(Task task) {
+
+        if (task != null) {
+            task_id.setText(Long.toString(task.getId()));
+            name_field.setText(task.getName());
+            if (task.getWorkload().equals("LITE")) {
+                low_check.setSelected(true);
+                med_check.setSelected(false);
+                heavy_check.setSelected(false);
+            } else if (task.getWorkload().equals("MOD")) {
+                low_check.setSelected(false);
+                med_check.setSelected(true);
+                heavy_check.setSelected(false);
+            } else if (task.getWorkload().equals("HARD")) {
+                low_check.setSelected(false);
+                med_check.setSelected(false);
+                heavy_check.setSelected(true);
+            }
+            start_date.setValue(task.getStart_date().toLocalDate());
+            end_date.setValue(task.getEnd_date().toLocalDate());
+            start_field.setText(task.getStart_time().toString());
+            end_field.setText(task.getEnd_time().toString());
+            definition_field.setText(task.getDescription());
+        }
+    }
+
+
 
 }

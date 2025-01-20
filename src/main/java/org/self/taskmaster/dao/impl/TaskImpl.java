@@ -11,10 +11,11 @@ import java.time.ZoneId;
 public class TaskImpl extends DAO<Task> {
     private static final String INSERT = "INSERT INTO task( name, start_time, start_date, end_time, end_date, workload, description) values (?,?,?,?,?,?,?);";
     private static final String GET_ALL = "SELECT id, name, start_time, start_date, end_time, end_date, workload, description FROM task";
-    private static final String GET_ONE = "SELECT id, name, start_time, start_date, end_time, end_date, workload, description FROM customers where customer_id = ?";
-    private static final String DELETE = "DELETE FROM customers where customer_id = ?";
-    private static final String UPDATE = "UPDATE customers SET name = ?, start_time = ?, start_date = ?, end_time = ?, workload = ? , description = ? where customer_id= ?";
-    private static final String LAST_ONE = "SELECT customer_id FROM customers ORDER BY customer_id DESC LIMIT 1";
+    private static final String GET_ONE = "SELECT id, name, start_time, start_date, end_time, end_date, workload, description FROM task where id = ?";
+    private static final String DELETE = "DELETE FROM task where id = ?";
+    private static final String UPDATE = "UPDATE task SET name = ?, start_time = ?, start_date = ?, end_time = ?, end_date = ?, workload = ?, description = ? WHERE id = ?";
+
+    private static final String LAST_ONE = "SELECT id FROM task ORDER BY id DESC LIMIT 1";
 
 
     /**
@@ -63,6 +64,7 @@ public class TaskImpl extends DAO<Task> {
                 task.setEnd_date(resultSet.getDate("end_date"));
                 task.setWorkload(resultSet.getString("workload").toUpperCase());
                 task.setDescription(resultSet.getString("description"));
+                tasks.add(task);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -72,6 +74,7 @@ public class TaskImpl extends DAO<Task> {
 
     @Override
     public Task update(Task data) {
+        System.out.println(data);
         try (PreparedStatement statement = this.connection.prepareStatement(UPDATE)) {
             statement.setString(1, data.getName());
             statement.setTime(2, data.getStart_time());
@@ -80,7 +83,8 @@ public class TaskImpl extends DAO<Task> {
             statement.setDate(5, data.getEnd_date());
             statement.setString(6, data.getWorkload());
             statement.setString(7, data.getDescription());
-            statement.execute();
+            statement.setLong(8, data.getId());
+            statement.executeUpdate();
         }catch (Exception e) {
             e.printStackTrace();
         }

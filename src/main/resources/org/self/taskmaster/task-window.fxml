@@ -17,14 +17,19 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
+                  <TextField fx:id="task_id" editable="false" prefHeight="26.0" prefWidth="47.0">
+                     <HBox.margin>
+                        <Insets left="2.0" top="30.0" />
+                     </HBox.margin>
+                  </TextField>
                   <Label text="Task Name">
                      <HBox.margin>
-                        <Insets bottom="30.0" left="30.0" right="10.0" top="30.0" />
+                        <Insets bottom="30.0" left="5.0" right="5.0" top="30.0" />
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="name_field" prefHeight="26.0" prefWidth="212.0" promptText="enter name">
                      <HBox.margin>
-                        <Insets bottom="30.0" left="25.0" right="30.0" top="30.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
                      </HBox.margin>
                   </TextField>
                   <Button fx:id="done" mnemonicParsing="false" onAction="#done_action" text="Done">
