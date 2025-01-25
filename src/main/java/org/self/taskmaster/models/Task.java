@@ -13,13 +13,14 @@ public class Task {
     private Date end_date;
     private WorkLoad workload;
     private String description;
+    private Boolean completed;
 
 
 
     public Task() {
     }
 
-    public Task(long id, String name, Time start_time, Time end_time, Date start_date, Date end_date, WorkLoad workload, String description) {
+    public Task(long id, String name, Time start_time, Time end_time, Date start_date, Date end_date, WorkLoad workload, String description, Boolean completed) {
         this.id = id;
         this.name = name;
         this.start_time = start_time;
@@ -28,6 +29,7 @@ public class Task {
         this.end_date = end_date;
         this.workload = workload;
         this.description = description;
+        this.completed = completed;
     }
 
     public long getId() {
@@ -101,6 +103,14 @@ public class Task {
         this.description = description;
     }
 
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -112,6 +122,7 @@ public class Task {
                 ", end_date=" + end_date +
                 ", workload=" + workload +
                 ", description='" + description + '\'' +
+                ", completed=" + completed +
                 '}';
     }
 }

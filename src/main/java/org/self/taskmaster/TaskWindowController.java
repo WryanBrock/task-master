@@ -93,7 +93,6 @@ public class TaskWindowController {
         task.setEnd_time(TimeProcessing(end_field.getText()));
         task.setEnd_date(DateProcessing(end_date.getValue()));
         task.setDescription(definition_field.getText().trim());
-
         if (modified){
             task.setId(Long.parseLong(task_id.getText()));
             try {
@@ -103,6 +102,7 @@ public class TaskWindowController {
             }
         }else{
             try {
+                task.setCompleted(false);
                 Task taskReturn = new TaskImpl(DBConnect.getConnection()).create(task);
                 System.out.println("create");
             } catch (SQLException throwable) {
